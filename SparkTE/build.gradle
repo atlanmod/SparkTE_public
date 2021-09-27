@@ -1,0 +1,50 @@
+group 'atlanmod'
+version '1.0-SNAPSHOT'
+
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "https://dl.bintray.com/atlanmod/unveil"
+        }
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
+    }
+}
+
+subprojects {
+    apply plugin: 'scala'
+    apply plugin: 'java'
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    ScalaCompileOptions.metaClass.useAnt = false
+
+    dependencies {
+        /*
+        Use Scala 2.12 for compatibility with spark graphx 3.1.0
+         */
+        implementation group: 'org.scala-lang', name: 'scala-library', version: '2.12.12'
+        /*
+        For testing
+         */
+        testImplementation 'junit:junit:4.13'
+        testImplementation 'org.scalatest:scalatest_2.12:3.2.2'
+        testImplementation 'org.scalactic:scalactic_2.12:3.2.2'
+        testImplementation 'org.scalatestplus:junit-4-13_2.12:3.2.2.0'
+        testRuntimeOnly 'org.scala-lang.modules:scala-xml_2.12:1.2.0' // Scala XML library is required for testing
+        testRuntimeOnly 'com.vladsch.flexmark:flexmark-all:0.35.10'
+    }
+}
+
